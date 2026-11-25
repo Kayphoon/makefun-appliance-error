@@ -12,6 +12,13 @@ import { join } from "node:path";
 const LINE =
   "Cycle paused: one sock in the drum, one in the filter. I don't lose them — I run a two-sock economy, and you keep auditing only one side of it.";
 
+// The gate refuses anything over 200 characters, so check before writing
+// rather than let a future edit of the line quietly disqualify the entry.
+if ([...LINE].length > 200) {
+  throw new Error(`entry line is ${[...LINE].length} characters, over the 200 limit`);
+}
+
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, "entry.txt"), LINE, "utf8");
+console.error(`wrote entry.txt: ${[...LINE].length} characters`);
